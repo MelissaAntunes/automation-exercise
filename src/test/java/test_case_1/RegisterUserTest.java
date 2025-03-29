@@ -1,40 +1,52 @@
-package sign_up;
+package test_case_1;
 
 import base.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import pages.HomePage;
-import pages.LoginSignUpPage;
-import pages.SignUpPage;
+import pages.*;
 
-public class SignUpTests extends BaseTest {
+public class RegisterUserTest extends BaseTest {
 
     @Test
-    public void testSuccessfulSignUp() {
+    public void testSignUp() {
         HomePage homePage = new HomePage(driver);
         LoginSignUpPage loginSignUpPage = homePage.goToLoginSignUpLink();
-
-        Assert.assertTrue(loginSignUpPage.verifyIfNewUserSignUpLabelIsVisible(),
-                "New user sign up label is not visible");
-
-        loginSignUpPage.signUp("Mariaa", "mariaa123arriba@gmail.com");
+        Assert.assertTrue(loginSignUpPage.isNewUserSignUpLabelDisplayed(),
+                "Expected 'New User Signup!' to be visible, but it wasn't.");
+        loginSignUpPage.signUp("QA Engineer", "qaengineer321@gmail.com");
 
         SignUpPage signUpPage = new SignUpPage(driver);
+        Assert.assertTrue(signUpPage.isAccountInfoDisplayed(),
+                "Expected 'ENTER ACCOUNT INFORMATION' to be visible, but it wasn't.");
         signUpPage.fillAccountInfo(
-                "123123",
+                "password",
                 "1",
                 "1",
                 "1991",
-                "Maria",
-                "Maria",
-                "Microsoft",
-                "aaaaaaa",
-                "aaaaaaaa",
+                "first name",
+                "last name",
+                "selenium",
+                "selenium avenue",
+                "selenium avenue 2",
                 "Canada",
                 "Montreal",
                 "Laval",
                 "1234567890",
-                "+55119987653647");
+                "+1119987653647");
+
+        AccountCreatedPage accountCreatedPage = new AccountCreatedPage(driver);
+        Assert.assertTrue(accountCreatedPage.isAccountCreatedDisplayed(),
+                "Expected 'ACCOUNT CREATED' to be visible, but it wasn't.");
+        accountCreatedPage.clickContinueButton();
+
+        Assert.assertTrue(homePage.isLoggedInAsUsernameDisplayed(),
+                "Expected 'Logged in as username' to be visible, but it wasn't." );
+        homePage.clickDeleteAccountButton();
+
+        DeleteAccountPage deleteAccountPage = new DeleteAccountPage(driver);
+        Assert.assertTrue(deleteAccountPage.isAccountDeletedDisplayed(),
+                "Expected 'ACCOUNT DELETED' to be visible, but it wasn't.");
+        deleteAccountPage.clickContinueButton();
     }
 
 }
